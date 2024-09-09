@@ -1,5 +1,6 @@
 var express = require('express');
 var cors = require('cors');
+var formidable = require('formidable');
 require('dotenv').config()
 
 var app = express();
@@ -11,6 +12,25 @@ app.get('/', function (req, res) {
   res.sendFile(process.cwd() + '/views/index.html');
 });
 
+app.post('/api/fileanalyse', function (req, res) {
+  console.log("file");
+  console.log("req:", req);
+  var form = new formidable.IncomingForm();
+  //console.log(form);
+  form.parse(req, function (err, fields, files) {
+	  console.log(files);
+	  console.log(fields);
+	  //var path = 
+		let uploadedFile = files.upfile && files.upfile[0];
+
+        // Die gewünschten Eigenschaften extrahieren
+        let originalFilename = uploadedFile.originalFilename;
+        let mimetype = uploadedFile.mimetype;
+        let size = uploadedFile.size;
+	  return res.json({ name: originalFilename, type: mimetype, size: size });
+  });
+  //res.sendFile(process.cwd() + '/views/index.html');
+});
 
 
 
